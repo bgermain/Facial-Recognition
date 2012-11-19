@@ -2,21 +2,22 @@ import com.googlecode.javacv.CanvasFrame;
 import com.googlecode.javacv.OpenCVFrameGrabber;
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
 
-public class CaptureImage {
+public class FaceScanner {
     
     IplImage image;
-    static CanvasFrame canvas = new CanvasFrame("Web Cam");
+    static CanvasFrame canvas = new CanvasFrame("Facial Recognition Scan");
     
-    public CaptureImage() {
+    public FaceScanner() {
         canvas.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
     }
     
-    private static void captureFrame() {
-        // 0-default camera, 1 - next...so on
-        final OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(0);
+    public static void scanFrame() {
+        final OpenCVFrameGrabber frameGrabber = new OpenCVFrameGrabber(0);
         try {
-            grabber.start();
-            IplImage img = grabber.grab();
+        	//frameGrabber.setImageHeight(480);
+        	//frameGrabber.setImageWidth(640);
+            frameGrabber.start();
+            IplImage img = frameGrabber.grab();
             if (img != null) {
                 //cvSaveImage(name, img);
                 //cvSaveImage("Image",img);
@@ -26,9 +27,10 @@ public class CaptureImage {
             e.printStackTrace();
         }
     }
-    public static void main(String[] args) throws InterruptedException {
+    
+	public void runScan() throws InterruptedException {
         while(true){
-            captureFrame(); 
+            scanFrame(); 
             Thread.sleep(100);
         }
     }     
