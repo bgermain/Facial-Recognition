@@ -27,14 +27,15 @@ public class UserInterface extends JFrame{
 		super.add(closeButton);
 		super.setSize(160, 150);
 		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	
+		
 		//Set Layout
-		container = getContentPane();
-		layout.setAlignment(FlowLayout.CENTER);
-		layout.layoutContainer(container);
+		//container = getContentPane();
+		//layout.setAlignment(FlowLayout.CENTER);
+		//layout.layoutContainer(container);
 		
 		//Initialize Canvas for Webcam
 		//super.add(canvas);
+		canvas.setSize(640, 480);
 		canvas.setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         //On click: Scan the image in and store it as the entered name
