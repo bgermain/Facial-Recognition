@@ -2,13 +2,12 @@ import javax.swing.JOptionPane;
 
 public class Main {
     
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws Exception {
 		String name;
 		do{
 			name = JOptionPane.showInputDialog("Please enter the name for the image scanned: ", "Enter your name here");
-			//Possibly read in filenames from ScannedImages folder to see if there are any matches on the name entered. If there are, then
-			//change the name to <Name>-02 and increment for every entry
-			if(name == null){
+			
+			if(name == null || name.equalsIgnoreCase("Enter your name here")){
 				JOptionPane.showMessageDialog(null, "Please enter a valid entry");
 			}else{
 				FaceScanner scan = new FaceScanner(name);
@@ -17,6 +16,6 @@ public class Main {
 				ui.setVisible(true);
 	        	scan.runScan(ui);
 			}
-		}while(name == null);
+		}while(name == null || name.equalsIgnoreCase("Enter your name here"));
     } 
 }

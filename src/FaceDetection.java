@@ -1,3 +1,6 @@
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
+
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
 import com.googlecode.javacv.cpp.opencv_core.CvRect;
 import com.googlecode.javacv.cpp.opencv_core.CvScalar;
@@ -10,60 +13,74 @@ import static com.googlecode.javacv.cpp.opencv_core.cvGetSeqElem;
 import static com.googlecode.javacv.cpp.opencv_core.cvRectangle;
 import static com.googlecode.javacv.cpp.opencv_core.cvPoint;
 import static com.googlecode.javacv.cpp.opencv_objdetect.cvHaarDetectObjects;
-import static com.googlecode.javacv.cpp.opencv_imgproc.cvCvtColor;
-import static com.googlecode.javacv.cpp.opencv_imgproc.CV_BGR2GRAY;
 import static com.googlecode.javacv.cpp.opencv_core.CV_AA;
-import static com.googlecode.javacv.cpp.opencv_core.IPL_DEPTH_8U;
  
 public class FaceDetection {
+ 
+	// The cascade definition to be used for detection.
+	private static final String CASCADE_FILE = "src/haarcascade_frontalface_alt.xml";
+	 
+	public IplImage DetectFaces(String filename) throws Exception {
 	
-	///// WORK ON DETECTING THE LARGEST RECTANGLE (closest person) THEN CROP THE DETECTED IMAGE AND SAVING IT.
- 
-  // The cascade definition to be used for detection.
-  private static final String CASCADE_FILE = "src/haarcascade_frontalface_alt.xml";
- 
-  public IplImage DetectFaces(String filename) throws Exception {
+	    // Load the image previously scanned.
+	    IplImage image = cvLoadImage(filename, 1);
+	 
+	    // Converts the image to gray scale for detection to work, using the same dimensions as the original.
+	    IplImage grayImage = IplImage.createFrom(convertColorToGray(image.getBufferedImage()));
+	    
+	    CvMemStorage storage = CvMemStorage.create();
+	 
+	    // Using the cascade file, this creates a classification for what objects to detect. In our case it is the anterior of the face.
+	    CvHaarClassifierCascade classifier = new CvHaarClassifierCascade(cvLoad(CASCADE_FILE));
+	 
+	    // Detect Haar-like objects, depending on the classifier. In this case we use a classifier for detecting the anterior of the face.
+	    CvSeq faces = cvHaarDetectObjects(grayImage, classifier, storage, 1.1, 1, 0);
+	    
+	    // Initialize the static variables in FaceScanner for determining the area to crop the largest detected face.
+	    FaceScanner.height = 0;
+	    FaceScanner.width = 0;
+	    FaceScanner.x = 0;
+	    FaceScanner.y = 0;
+	    
+	    // Loop through all detected faces and save the largest (closest) face.
+	    for (int i = 0; i < faces.total(); i++) {
+		    CvRect rect = new CvRect(cvGetSeqElem(faces, i));
+		    if(FaceScanner.width < rect.width()){
+			    FaceScanner.width = rect.width();
+			    FaceScanner.height = rect.height();
+			  	FaceScanner.x = rect.x();
+			  	FaceScanner.y = rect.y();
+		    }
 
-    // Load the image that was previously scanned in.
-    IplImage originalImage = cvLoadImage(filename, 1);
- 
-    // We need a grayscale image in order to do the recognition, so we
-    // create a new image of the same size as the original one.
-    IplImage grayImage = IplImage.create(originalImage.width(), originalImage.height(), IPL_DEPTH_8U, 1);
- 
-    // We convert the original image to grayscale.
-    cvCvtColor(originalImage, grayImage, CV_BGR2GRAY);
- 
-    CvMemStorage storage = CvMemStorage.create();
- 
-    // We instantiate a classifier cascade to be used for detection, using the cascade definition.
-    CvHaarClassifierCascade cascade = new CvHaarClassifierCascade(cvLoad(CASCADE_FILE));
- 
-    // We detect the faces.
-    CvSeq faces = cvHaarDetectObjects(grayImage, cascade, storage, 1.1, 1, 0);
-    
-    //Initialize the static variables for determining the area to crop the largest detected face.
-    FaceScanner.height = 0;
-    FaceScanner.width = 0;
-    FaceScanner.x = 0;
-    FaceScanner.y = 0;
-    
-    //We iterate over the discovered faces and draw red rectangles around them.
-    for (int i = 0; i < faces.total(); i++) {
-      CvRect rect = new CvRect(cvGetSeqElem(faces, i));
-      if(FaceScanner.width < rect.width()){
-    	  FaceScanner.width = rect.width();
-    	  FaceScanner.height = rect.height();
-    	  FaceScanner.x = rect.x();
-    	  FaceScanner.y = rect.y();
-      }
-
-      cvRectangle(originalImage, cvPoint(rect.x(), rect.y()), cvPoint(rect.x() + rect.width(), rect.y() + rect.height()), CvScalar.RED, 2, CV_AA, 0);
-    }
- 
-    // Save the image to a new file.
-    cvSaveImage(filename, originalImage);
-    
-    return originalImage;
-  }
+		    if(rect.width() > 130 && rect.height() > 130){
+		  	  // Draw a square around the detected face.
+		  	  cvRectangle(image, cvPoint(rect.x(), rect.y()), cvPoint(rect.x() + rect.width(), rect.y() + rect.height()), CvScalar.GREEN, 2, CV_AA, 0);
+		  	}
+	    }
+	 
+	    // Checks that there was a detected face in the image before saving. Also, the detected "face" must be large enough to be considered
+	    // a detected face. This is to limit the amount of erroneous detections. This saves the full size image with detections drawn on
+	    // whole image before cropping.
+	    if(!(FaceScanner.height == 0 && FaceScanner.width == 0) && !(FaceScanner.height < 130 && FaceScanner.width < 130)){
+	    	// Save the image.
+	    	cvSaveImage(filename, image);
+	    }else{
+	    	return null;
+	    }
+	    
+	    return image;
+	}
+	
+	// Changes a color image to gray scale.
+	private BufferedImage convertColorToGray(BufferedImage image){
+		try{
+			BufferedImage gray = new BufferedImage(image.getWidth(),image.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+			ColorConvertOp convertOp = new ColorConvertOp(image.getColorModel().getColorSpace(), gray.getColorModel().getColorSpace(), null);
+			convertOp.filter(image,gray);
+			return gray;
+		}catch(Exception e){
+			System.out.println("Color conversion failed.");
+		}
+		return image;		
+	}
 }

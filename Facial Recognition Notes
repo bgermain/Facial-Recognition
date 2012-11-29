@@ -1,0 +1,19 @@
+Program Notes
+--------------------------------------
+
+Draw boxes? If a box gets drawn within the face it will interfere with the recognition component.
+
+Improve UI
+
+Make into an executable
+
+Talk about the different classifiers
+	- Expand the number of classifiers to be more accurate. Check for frontal face, if nothing, then check side face classifier.
+	
+	
+	
+FINISHED
+---------------------------------------
+	
+Use detect button to run detection.  -- DONE
+Organize code and add comments and rename code -- DONE

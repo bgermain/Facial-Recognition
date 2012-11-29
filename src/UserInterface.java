@@ -14,7 +14,7 @@ public class UserInterface extends JFrame{
 
 	static CanvasFrame canvas = new CanvasFrame("Recognition Scanner");
 	JButton scanButton = new JButton("Scan Image");
-	JButton detectButton = new JButton("Detect");
+	JButton detectButton = new JButton("Detect Face");
 	JButton closeButton = new JButton("Close");
 	JTextField nameText = new JTextField(20);
 	Container container;
@@ -28,20 +28,14 @@ public class UserInterface extends JFrame{
 		super.add(scanButton);
 		super.add(detectButton);
 		super.add(closeButton);
-		super.setSize(300, 100);
+		super.setSize(330, 100);
 		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		//Set Layout
-		//container = getContentPane();
-		//layout.setAlignment(FlowLayout.CENTER);
-		//layout.layoutContainer(container);
-		
-		//Initialize Canvas for Webcam
-		//super.add(canvas);
+		// Initialize Canvas for Webcam
 		canvas.setSize(640, 480);
 		canvas.setDefaultCloseOperation(EXIT_ON_CLOSE);
         
-        //On click: Scan the image in and store it as the entered name
+        // On click: Scan the image in and store it as the entered name
         scanButton.addActionListener(
         		new ActionListener(){
         			public void actionPerformed(ActionEvent event){
@@ -49,7 +43,6 @@ public class UserInterface extends JFrame{
 	        				if(canvas.isEnabled()){
 	        					canvas.setEnabled(false);
 	        					scanButton.setText("Rescan");
-	        					JOptionPane.showMessageDialog(null, "Face Scanned!");
 	        				} else{
 	        					canvas.setEnabled(true);
 	        					scanButton.setText("Scan Image");
@@ -61,7 +54,7 @@ public class UserInterface extends JFrame{
         		}
         );
         
-        //On click: Close the program
+        // On click: Close the program
         closeButton.addActionListener(
         		new ActionListener(){
         			public void actionPerformed(ActionEvent event){
@@ -70,11 +63,11 @@ public class UserInterface extends JFrame{
         		}
         );
         
-        //On click: Scan the face and recognize who the image is
+        // On click: Scan the face and recognize who the image is
         detectButton.addActionListener(
         		new ActionListener(){
         			public void actionPerformed(ActionEvent event){
-        				JOptionPane.showMessageDialog(null, "Face Recognized! Welcome Back, Brad!");
+        				FaceScanner.detect = true;
         			}
         		}
         );
