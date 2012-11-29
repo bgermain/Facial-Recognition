@@ -2,8 +2,14 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/Users/bradg0620/Downloads/javacv-bin/javacpp.jar"/>
-	<classpathentry kind="lib" path="/Users/bradg0620/Downloads/javacv-bin/javacv-macosx-x86_64.jar"/>
-	<classpathentry kind="lib" path="/Users/bradg0620/Downloads/javacv-bin/javacv.jar"/>
+	<classpathentry kind="lib" path="lib/neuroph-2.7/neuroph-imgrec-2.7.jar"/>
+	<classpathentry kind="lib" path="lib/JavaCV/javacpp.jar"/>
+	<classpathentry kind="lib" path="lib/JavaCV/javacv-android-arm.jar"/>
+	<classpathentry kind="lib" path="lib/JavaCV/javacv-linux-x86_64.jar"/>
+	<classpathentry kind="lib" path="lib/JavaCV/javacv-linux-x86.jar"/>
+	<classpathentry kind="lib" path="lib/JavaCV/javacv-macosx-x86_64.jar"/>
+	<classpathentry kind="lib" path="lib/JavaCV/javacv-windows-x86_64.jar"/>
+	<classpathentry kind="lib" path="lib/JavaCV/javacv-windows-x86.jar"/>
+	<classpathentry kind="lib" path="lib/JavaCV/javacv.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

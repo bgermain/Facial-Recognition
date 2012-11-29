@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 import com.googlecode.javacv.CanvasFrame;
 
@@ -15,6 +16,7 @@ public class UserInterface extends JFrame{
 	JButton scanButton = new JButton("Scan Image");
 	JButton detectButton = new JButton("Detect");
 	JButton closeButton = new JButton("Close");
+	JTextField nameText = new JTextField(20);
 	Container container;
 	FlowLayout layout = new FlowLayout();
     
@@ -22,10 +24,11 @@ public class UserInterface extends JFrame{
 		//Initialize Control Panel
 		super("Control Panel");
 		super.setLayout(layout);
+		super.add(nameText);
 		super.add(scanButton);
 		super.add(detectButton);
 		super.add(closeButton);
-		super.setSize(160, 150);
+		super.setSize(300, 100);
 		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//Set Layout
@@ -42,13 +45,17 @@ public class UserInterface extends JFrame{
         scanButton.addActionListener(
         		new ActionListener(){
         			public void actionPerformed(ActionEvent event){
-        				if(canvas.isEnabled()){
-        					canvas.setEnabled(false);
-        					scanButton.setText("Rescan");
-        					JOptionPane.showMessageDialog(null, "Face Scanned!");
-        				} else{
-        					canvas.setEnabled(true);
-        					scanButton.setText("Scan Image");
+        				if(!nameText.getText().isEmpty()){
+	        				if(canvas.isEnabled()){
+	        					canvas.setEnabled(false);
+	        					scanButton.setText("Rescan");
+	        					JOptionPane.showMessageDialog(null, "Face Scanned!");
+	        				} else{
+	        					canvas.setEnabled(true);
+	        					scanButton.setText("Scan Image");
+	        				}
+        				}else{
+        					JOptionPane.showMessageDialog(null, "Please enter a name for the saved image in the textbox.");
         				}
         			}
         		}

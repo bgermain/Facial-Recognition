@@ -13,8 +13,9 @@ public class Main {
 			}else{
 				FaceScanner scan = new FaceScanner(name);
 				UserInterface ui = new UserInterface();
+				ui.nameText.setText(name);
 				ui.setVisible(true);
-	        	scan.runScan(ui.canvas);
+	        	scan.runScan(ui);
 			}
 		}while(name == null);
     } 
