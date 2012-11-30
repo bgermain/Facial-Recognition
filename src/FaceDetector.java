@@ -3,18 +3,13 @@ import java.awt.image.ColorConvertOp;
 
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
 import com.googlecode.javacv.cpp.opencv_core.CvRect;
-import com.googlecode.javacv.cpp.opencv_core.CvScalar;
 import com.googlecode.javacv.cpp.opencv_core.CvMemStorage;
 import com.googlecode.javacv.cpp.opencv_objdetect.CvHaarClassifierCascade;
 import com.googlecode.javacv.cpp.opencv_core.CvSeq;
 import static com.googlecode.javacv.cpp.opencv_core.cvLoad;
-import static com.googlecode.javacv.cpp.opencv_highgui.*;
 import static com.googlecode.javacv.cpp.opencv_core.cvGetSeqElem;
-import static com.googlecode.javacv.cpp.opencv_core.cvRectangle;
-import static com.googlecode.javacv.cpp.opencv_core.cvPoint;
 import static com.googlecode.javacv.cpp.opencv_objdetect.cvHaarDetectObjects;
-import static com.googlecode.javacv.cpp.opencv_core.CV_AA;
- 
+
 public class FaceDetector {
  
 	// The cascade definition to be used for detection.
@@ -77,7 +72,9 @@ public class FaceDetector {
 	    return image;
 	}
 	
-	// Changes a color image to gray scale.
+	/* convertColorToGray
+	 * Changes a color image to gray scale.
+	 */
 	private BufferedImage convertColorToGray(BufferedImage image){
 		try{
 			BufferedImage gray = new BufferedImage(image.getWidth(),image.getHeight(), BufferedImage.TYPE_BYTE_GRAY);

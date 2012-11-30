@@ -25,7 +25,7 @@ public class FaceScanner{
 	
 	public FaceScanner() {
 		filename = "Users/temp.png";
-		recFilename = "User Attempts/temp.png";
+		recFilename = "UserAttempts/temp.png";
 		image = new IplImage();
 		width = 0;
 		height = 0;
@@ -39,6 +39,9 @@ public class FaceScanner{
 		faceRecognize = new FacialRecognizer();
 	}
 	
+	/* scanFrame
+	 * Scans each frame through the webcam outputting video feedback.
+	 */
 	public static IplImage scanFrame(UserInterface ui, CanvasFrame canvas) throws Exception {
 	    final OpenCVFrameGrabber frameGrabber = new OpenCVFrameGrabber(0);
 	    try {
@@ -55,6 +58,9 @@ public class FaceScanner{
 		return frameGrabber.grab();
 	}
 	
+	/* runScan
+	 * Runs the face scanner and based on user input adjusts the number of frames.
+	 */
 	public void runScan(UserInterface ui) throws Exception {
 		CanvasFrame canvas = ui.canvas;
 		BufferedImage croppedImage;
@@ -66,11 +72,11 @@ public class FaceScanner{
 	        	image = scanFrame(ui, canvas);
 	        	Thread.sleep(10);
 	    	}
-			if(!recognize && !(canvas.isEnabled())){
+			if(!recognize && !(canvas.isEnabled())){	//RUNS WHEN SCAN BUTTON IS PRESSED
 				try{
 					faceDetect.DetectFaces(image);		//Used primarily to populate the width, height, and location of the face to be detected.
 					
-					/*Uncomment to display the detection lines and uncomment drawing in FaceDetector class*/
+					/*Uncomment to display the detection lines and uncomment the rectangle drawing in FaceDetector class*/
 					//canvas.showImage(image);
 					//Thread.sleep(1000);		//Delay time to see the faces that are detected before choosing the closest.
 					//image = cvLoadImage(filename, 1); 	//Reload image to remove rectangle
@@ -89,18 +95,17 @@ public class FaceScanner{
 					JOptionPane.showMessageDialog(null, "There are no faces detected, please rescan to try again.");
 				}
 				canvas.setEnabled(true);
-			}else if(recognize && !(canvas.isEnabled())){
+			}else if(recognize && !(canvas.isEnabled())){	//RUNS WHEN RECOGNIZE BUTTON PRESSED
 				String user = "";
 				try{
 					faceDetect.DetectFaces(image);		//Used primarily to populate the width, height, and location of the face to be detected.
 					croppedImage = cropImage(image.getBufferedImage());
 					cvSaveImage(recFilename, IplImage.createFrom(croppedImage));
 					
-					user = faceRecognize.callNetwork("Users/", recFilename, "temp");
-
-					//TRAIN NEURAL NETWORK
-					//helper.createNewNeuralNetwork("ann", canvasDim, ColorMode.FULL_COLOR, arg3, arg4, arg5);
-					//RUN RECOGNIZER USING CROPPEDIMAGE AS THE IMAGE TO CHECK WITH THE PREVIOUSLY SCANNED IMAGES
+					// Train the neural network with the images saved in Users and then 
+					// recognize the face by finding the user with the highest accuracy
+					// in comparing the two images.
+					//user = faceRecognize.callNetwork("Users/", recFilename, "temp");
 					
 					JOptionPane.showMessageDialog(null, "User " + user + " was detected with a " + 10 +  "% accuracy level.");
 				} catch (Exception e) {
@@ -113,15 +118,23 @@ public class FaceScanner{
 		}
 	}
 	
+	/* cropImage
+	 * Crops the passed image (detected face) for image processing through the recognition section.
+	 */
 	private BufferedImage cropImage(BufferedImage src) {
 	      return src.getSubimage(x, y, width, height);
 	}
 	
+	/* changeFilename
+	 * Changes the filename to the name inputted by the user.
+	 */
 	public static void changeFilename(String name){
 		filename = filename.replace("temp.png", name + ".png");
 	}
 	
-	// Changes a color image to gray scale.
+	/* convertColorToGray
+	 * Changes a color image to gray scale.
+	 */
 	private BufferedImage convertColorToGray(BufferedImage image){
 		try{
 			BufferedImage gray = new BufferedImage(image.getWidth(),image.getHeight(), BufferedImage.TYPE_BYTE_GRAY);

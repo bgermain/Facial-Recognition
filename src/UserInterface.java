@@ -1,4 +1,4 @@
-import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,7 +14,7 @@ public class UserInterface extends JFrame{
 	JButton addUserButton = new JButton("Add User");
 	JButton recognizeButton = new JButton("Recognize");
 	JButton closeButton = new JButton("Close");
-	FlowLayout layout = new FlowLayout();
+	GridLayout layout = new GridLayout(3, 1);
     
 	public UserInterface(){
 		//Initialize Control Panel
@@ -23,11 +23,16 @@ public class UserInterface extends JFrame{
 		super.add(addUserButton);
 		super.add(recognizeButton);
 		super.add(closeButton);
-		super.setSize(330, 100);
+		super.setUndecorated(true);
+		super.setLocation(0, 22);
+		super.setSize(100, 480);
+		super.setResizable(false);
 		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		// Initialize Canvas for Webcam
 		canvas.setSize(640, 480);
+		canvas.setLocation(100, 20);
+		canvas.setResizable(false);
 		canvas.setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         // On click: Scan the image in and store it as the entered name.

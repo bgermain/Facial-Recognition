@@ -75,7 +75,6 @@ public class FacialRecognizer {
 	}
 	
 	
-	
 	/*
 	 * @param dir1 - directory of all cropped images to be trained e.g. "C://images/"
 	 * @param dir2 - location of image to be recognized e.g. "C://images/recognize/jack.png"
