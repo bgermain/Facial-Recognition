@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="lib/JavaCV/javacv-windows-x86_64.jar"/>
 	<classpathentry kind="lib" path="lib/JavaCV/javacv-windows-x86.jar"/>
 	<classpathentry kind="lib" path="lib/JavaCV/javacv.jar"/>
+	<classpathentry kind="lib" path="lib/neuroph-2.7/neuroph-core-2.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

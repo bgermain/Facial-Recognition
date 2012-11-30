@@ -1,5 +1,7 @@
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
+
 import javax.swing.JOptionPane;
 
 import com.googlecode.javacv.CanvasFrame;
@@ -13,14 +15,17 @@ public class FaceScanner{
     
 	IplImage image;
 	static String filename;
+	static String recFilename;
 	static int width, height, x, y;
 	static boolean recognize;
 	ImageRecognitionHelper helper;
 	Dimension canvasDim;
 	FaceDetector faceDetect;
+	FacialRecognizer faceRecognize;
 	
 	public FaceScanner() {
 		filename = "Users/temp.png";
+		recFilename = "User Attempts/temp.png";
 		image = new IplImage();
 		width = 0;
 		height = 0;
@@ -31,6 +36,7 @@ public class FaceScanner{
 		//helper = new ImageRecognitionHelper();
 		canvasDim = new Dimension();
 		faceDetect = new FaceDetector();
+		faceRecognize = new FacialRecognizer();
 	}
 	
 	public static IplImage scanFrame(UserInterface ui, CanvasFrame canvas) throws Exception {
@@ -88,7 +94,10 @@ public class FaceScanner{
 				try{
 					faceDetect.DetectFaces(image);		//Used primarily to populate the width, height, and location of the face to be detected.
 					croppedImage = cropImage(image.getBufferedImage());
+					cvSaveImage(recFilename, IplImage.createFrom(croppedImage));
 					
+					user = faceRecognize.callNetwork("Users/", recFilename, "temp");
+
 					//TRAIN NEURAL NETWORK
 					//helper.createNewNeuralNetwork("ann", canvasDim, ColorMode.FULL_COLOR, arg3, arg4, arg5);
 					//RUN RECOGNIZER USING CROPPEDIMAGE AS THE IMAGE TO CHECK WITH THE PREVIOUSLY SCANNED IMAGES
@@ -110,5 +119,18 @@ public class FaceScanner{
 	
 	public static void changeFilename(String name){
 		filename = filename.replace("temp.png", name + ".png");
+	}
+	
+	// Changes a color image to gray scale.
+	private BufferedImage convertColorToGray(BufferedImage image){
+		try{
+			BufferedImage gray = new BufferedImage(image.getWidth(),image.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+			ColorConvertOp convertOp = new ColorConvertOp(image.getColorModel().getColorSpace(), gray.getColorModel().getColorSpace(), null);
+			convertOp.filter(image,gray);
+			return gray;
+		}catch(Exception e){
+			System.out.println("Color conversion failed.");
+		}
+		return image;		
 	}
 }
