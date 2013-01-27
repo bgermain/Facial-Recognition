@@ -14,6 +14,7 @@ import org.neuroph.imgrec.ImageRecognitionHelper;
 public class FaceScanner{
     
 	IplImage image;
+	static boolean displayRects;
 	static String filename;
 	static String recFilename;
 	static int width, height, x, y;
@@ -32,6 +33,7 @@ public class FaceScanner{
 		x = 0;
 		y = 0;
 		recognize = false;
+		displayRects = true;
 		
 		//helper = new ImageRecognitionHelper();
 		canvasDim = new Dimension();
@@ -76,21 +78,25 @@ public class FaceScanner{
 				try{
 					faceDetect.DetectFaces(image);		//Used primarily to populate the width, height, and location of the face to be detected.
 					
-					/*Uncomment to display the detection lines and uncomment the rectangle drawing in FaceDetector class*/
-					//canvas.showImage(image);
-					//Thread.sleep(1000);		//Delay time to see the faces that are detected before choosing the closest.
-					//image = cvLoadImage(filename, 1); 	//Reload image to remove rectangle
-					/*----------------------------------------*/
+					if(displayRects){
+						/*Uncomment to display the detection lines and uncomment the rectangle drawing in FaceDetector class*/
+						canvas.showImage(image);
+						Thread.sleep(1000);		//Delay time to see the faces that are detected before choosing the closest.
+						//image = cvLoadImage(filename, 1); 	//Reload image to remove rectangle
+						/*----------------------------------------*/
+					}	
 					
 					croppedImage = cropImage(image.getBufferedImage());
-					
-					/*Uncomment to zoom and show the closest face*/
-					//canvas.showImage(croppedImage);
-					/*-------------------------------------------*/
-					
+		
+					if(displayRects){
+						/*Uncomment to zoom and show the closest face*/
+						//canvas.showImage(croppedImage);
+						/*-------------------------------------------*/
+					}
 					cvSaveImage(filename, IplImage.createFrom(croppedImage));
 					//helper.createNewNeuralNetwork("ann", canvasDim, ColorMode.FULL_COLOR, arg3, arg4, arg5);
 					JOptionPane.showMessageDialog(null, "User " + filename.replace(".png", "").replace("Users/", "") + " was added to the system.");
+					filename = "Users/temp.png";
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "There are no faces detected, please rescan to try again.");
 				}
@@ -105,7 +111,7 @@ public class FaceScanner{
 					// Train the neural network with the images saved in Users and then 
 					// recognize the face by finding the user with the highest accuracy
 					// in comparing the two images.
-					//user = faceRecognize.callNetwork("Users/", recFilename, "temp");
+					user = faceRecognize.callNetwork("Users/", recFilename, "temp");
 					
 					JOptionPane.showMessageDialog(null, "User " + user + " was detected with a " + 10 +  "% accuracy level.");
 				} catch (Exception e) {

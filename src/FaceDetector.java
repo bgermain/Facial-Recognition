@@ -3,12 +3,17 @@ import java.awt.image.ColorConvertOp;
 
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
 import com.googlecode.javacv.cpp.opencv_core.CvRect;
+import com.googlecode.javacv.cpp.opencv_core.CvScalar;
 import com.googlecode.javacv.cpp.opencv_core.CvMemStorage;
 import com.googlecode.javacv.cpp.opencv_objdetect.CvHaarClassifierCascade;
 import com.googlecode.javacv.cpp.opencv_core.CvSeq;
 import static com.googlecode.javacv.cpp.opencv_core.cvLoad;
+import static com.googlecode.javacv.cpp.opencv_highgui.*;
 import static com.googlecode.javacv.cpp.opencv_core.cvGetSeqElem;
+import static com.googlecode.javacv.cpp.opencv_core.cvRectangle;
+import static com.googlecode.javacv.cpp.opencv_core.cvPoint;
 import static com.googlecode.javacv.cpp.opencv_objdetect.cvHaarDetectObjects;
+import static com.googlecode.javacv.cpp.opencv_core.CV_AA;
 
 public class FaceDetector {
  
@@ -51,12 +56,14 @@ public class FaceDetector {
 			    FaceScanner.y = rect.y();
 		    }
 
-		    /*Uncomment to draw the rectangles around the detected faces.*/
-		    //if(rect.width() > 130 && rect.height() > 130){
-		    	// Draw a square around the detected face.
-		    	//cvRectangle(image, cvPoint(rect.x(), rect.y()), cvPoint(rect.x() + rect.width(), rect.y() + rect.height()), CvScalar.GREEN, 2, CV_AA, 0);
-		  	//}
-		  	/*-----------------------------------------------------------*/
+		    if(FaceScanner.displayRects){
+			    /*Uncomment to draw the rectangles around the detected faces.*/
+			    //if(rect.width() > 130 && rect.height() > 130){
+			    	// Draw a square around the detected face.
+			    	cvRectangle(image, cvPoint(rect.x(), rect.y()), cvPoint(rect.x() + rect.width(), rect.y() + rect.height()), CvScalar.GREEN, 2, CV_AA, 0);
+			  	//}
+			  	/*-----------------------------------------------------------*/
+		    }
 	    }
 	 
 	    // Checks that there was a detected face in the image before saving. Also, the detected "face" must be large enough to be considered

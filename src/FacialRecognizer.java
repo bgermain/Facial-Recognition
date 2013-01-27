@@ -30,11 +30,11 @@ public class FacialRecognizer {
 	 * OUTPUT: String of filename of that file in training directory
 	 */
 	public static String callNetwork(String dir, String dir2,String imageName) throws FileNotFoundException, IOException {
-		dir = "/Users/bradg0620/Dropbox/Projects/Java/Facial-Recognition/Users"; // directory of images for training
-		dir2 = "/Users/bradg0620/Dropbox/Projects/Java/Facial-Recognition/Users/Brad.png";		//location of file to be identified
-		imageName = "Brad";
+		//dir = "/Users/bradg0620/Dropbox/Projects/Java/Facial-Recognition/Users"; // directory of images for training
+		//dir2 = "/Users/bradg0620/Dropbox/Projects/Java/Facial-Recognition/Users/Brad.png";		//location of file to be identified
+		//imageName = "Brad";
 		String answer = "";
-		
+
         answer = identify(dir, dir2, imageName);
 		
 		return answer;
@@ -50,14 +50,19 @@ public class FacialRecognizer {
 		
 		final File dir = new File(dir1);
 		for(File imgFile : dir.listFiles()) {
-			String path = imgFile.getAbsolutePath();
-			String newPath = path.replace("\\", "/");
-		//	System.out.println(newPath);
-			fileName = imgFile.getName();
-			if(!newPath.contains("png"))
-				break;
-			aNode = runNN(newPath, dir2, fileName);
-			ary.add(aNode);
+			if(!imgFile.isHidden()){
+				String path = imgFile.getAbsolutePath();
+				String newPath = path.replace("\\", "/");
+			//	System.out.println(newPath);
+				fileName = imgFile.getName();
+				System.out.println("FileName: " + fileName);
+				System.out.println("New Path: " + newPath);
+				System.out.println("Dir 2 " + dir2);
+				if(!newPath.contains("png"))
+					break;
+				aNode = runNN(newPath, dir2, fileName);
+				ary.add(aNode);
+			}
 		}
 		
 		double lowest = ary.get(0).getFieldTwo();
@@ -96,7 +101,7 @@ public class FacialRecognizer {
 	         File imagefile = new File(dir1);
 	         img = ImageIO.read(imagefile);   
 	     } catch (IOException e) {
-	     	System.out.println("yeah IOException");  
+	     	System.out.println("IOException");  
 	     }
 
 		samplingResolution.setHeight(img.getHeight());
