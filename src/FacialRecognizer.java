@@ -1,4 +1,3 @@
-
 import org.neuroph.core.NeuralNetwork;
 import org.neuroph.core.learning.DataSet;
 import org.neuroph.imgrec.ColorMode;
@@ -58,16 +57,16 @@ public class FacialRecognizer {
 				System.out.println("FileName: " + fileName);
 				System.out.println("New Path: " + newPath);
 				System.out.println("Dir 2 " + dir2);
-				if(!newPath.contains("png"))
-					break;
-				aNode = runNN(newPath, dir2, fileName);
-				ary.add(aNode);
+				if(!newPath.contains("png")) {
+					aNode = runNN(newPath, dir2, fileName);
+					ary.add(aNode);
+				}
 			}
 		}
 		
 		double lowest = ary.get(0).getFieldTwo();
 		int indexOfLowest = 0;
-		for(i = 0; i<ary.size()-1; i++) {
+		for(i = 0; i<ary.size(); i++) {
 			if(ary.get(i).getFieldTwo() < lowest) {
 				lowest = ary.get(i).getFieldTwo();
 				indexOfLowest = i;
