@@ -57,7 +57,7 @@ public class FacialRecognizer {
 				System.out.println("FileName: " + fileName);
 				System.out.println("New Path: " + newPath);
 				System.out.println("Dir 2 " + dir2);
-				if(!newPath.contains("png")) {
+				if(newPath.contains("png")) {
 					aNode = runNN(newPath, dir2, fileName);
 					ary.add(aNode);
 				}
