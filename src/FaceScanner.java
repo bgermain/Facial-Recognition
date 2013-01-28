@@ -17,6 +17,7 @@ public class FaceScanner{
 	static boolean displayRects;
 	static String filename;
 	static String recFilename;
+	static String testFilename;
 	static int width, height, x, y;
 	static boolean recognize;
 	ImageRecognitionHelper helper;
@@ -27,6 +28,7 @@ public class FaceScanner{
 	public FaceScanner() {
 		filename = "Users/temp.png";
 		recFilename = "UserAttempts/temp.png";
+		testFilename = "UserAttempts/1.png";
 		image = new IplImage();
 		width = 0;
 		height = 0;
@@ -111,7 +113,7 @@ public class FaceScanner{
 					// Train the neural network with the images saved in Users and then 
 					// recognize the face by finding the user with the highest accuracy
 					// in comparing the two images.
-					user = faceRecognize.callNetwork("Users/", recFilename, "temp");
+					user = faceRecognize.callNetwork("Users/", testFilename, "temp");
 					
 					JOptionPane.showMessageDialog(null, "User " + user + " was detected with a " + 10 +  "% accuracy level.");
 				} catch (Exception e) {
