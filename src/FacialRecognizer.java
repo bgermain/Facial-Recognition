@@ -29,9 +29,6 @@ public class FacialRecognizer {
 	 * OUTPUT: String of filename of that file in training directory
 	 */
 	public static String callNetwork(String dir, String dir2,String imageName) throws FileNotFoundException, IOException {
-		//dir = "/Users/bradg0620/Dropbox/Projects/Java/Facial-Recognition/Users"; // directory of images for training
-		//dir2 = "/Users/bradg0620/Dropbox/Projects/Java/Facial-Recognition/Users/Brad.png";		//location of file to be identified
-		//imageName = "Brad";
 		String answer = "";
 
         answer = identify(dir, dir2, imageName);

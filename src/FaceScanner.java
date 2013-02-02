@@ -1,6 +1,6 @@
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorConvertOp;
 
 import javax.swing.JOptionPane;
 
@@ -17,18 +17,15 @@ public class FaceScanner{
 	static boolean displayRects;
 	static String filename;
 	static String recFilename;
-	static String testFilename;
 	static int width, height, x, y;
 	static boolean recognize;
 	ImageRecognitionHelper helper;
 	Dimension canvasDim;
 	FaceDetector faceDetect;
-	FacialRecognizer faceRecognize;
 	
 	public FaceScanner() {
 		filename = "Users/temp.png";
 		recFilename = "UserAttempts/temp.png";
-		testFilename = "UserAttempts/1.png";
 		image = new IplImage();
 		width = 0;
 		height = 0;
@@ -36,11 +33,8 @@ public class FaceScanner{
 		y = 0;
 		recognize = false;
 		displayRects = true;
-		
-		//helper = new ImageRecognitionHelper();
 		canvasDim = new Dimension();
 		faceDetect = new FaceDetector();
-		faceRecognize = new FacialRecognizer();
 	}
 	
 	/* scanFrame
@@ -89,6 +83,7 @@ public class FaceScanner{
 					}	
 					
 					croppedImage = cropImage(image.getBufferedImage());
+					croppedImage = resizeImage(croppedImage, 125, 150, false);		//Resize the image for the recognizer
 		
 					if(displayRects){
 						/*Uncomment to zoom and show the closest face*/
@@ -96,7 +91,6 @@ public class FaceScanner{
 						/*-------------------------------------------*/
 					}
 					cvSaveImage(filename, IplImage.createFrom(croppedImage));
-					//helper.createNewNeuralNetwork("ann", canvasDim, ColorMode.FULL_COLOR, arg3, arg4, arg5);
 					JOptionPane.showMessageDialog(null, "User " + filename.replace(".png", "").replace("Users/", "") + " was added to the system.");
 					filename = "Users/temp.png";
 				} catch (Exception e) {
@@ -108,14 +102,17 @@ public class FaceScanner{
 				try{
 					faceDetect.DetectFaces(image);		//Used primarily to populate the width, height, and location of the face to be detected.
 					croppedImage = cropImage(image.getBufferedImage());
+					croppedImage = resizeImage(croppedImage, 125, 150, false);		//Resize the image for the recognizer
+					
 					cvSaveImage(recFilename, IplImage.createFrom(croppedImage));
 					
 					// Train the neural network with the images saved in Users and then 
 					// recognize the face by finding the user with the highest accuracy
 					// in comparing the two images.
-					user = faceRecognize.callNetwork("Users/", testFilename, "temp");
+					user = FacialRecognizer.callNetwork("Users/", recFilename, "temp");
 					
 					JOptionPane.showMessageDialog(null, "User " + user + " was detected with a " + 10 +  "% accuracy level.");
+					recognize = false;
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Unknown user.");
 				}
@@ -134,24 +131,22 @@ public class FaceScanner{
 	}
 	
 	/* changeFilename
-	 * Changes the filename to the name inputted by the user.
+	 * Changes the filename to the name inputed by the user.
 	 */
 	public static void changeFilename(String name){
 		filename = filename.replace("temp.png", name + ".png");
 	}
 	
-	/* convertColorToGray
-	 * Changes a color image to gray scale.
+	/* resizeImage
+	 * Resizes the BufferedImage to the specified height and width
 	 */
-	private BufferedImage convertColorToGray(BufferedImage image){
-		try{
-			BufferedImage gray = new BufferedImage(image.getWidth(),image.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
-			ColorConvertOp convertOp = new ColorConvertOp(image.getColorModel().getColorSpace(), gray.getColorModel().getColorSpace(), null);
-			convertOp.filter(image,gray);
-			return gray;
-		}catch(Exception e){
-			System.out.println("Color conversion failed.");
-		}
-		return image;		
-	}
+	BufferedImage resizeImage(BufferedImage originalImage, int newWidth, int newHeight, boolean preserveAlpha) {
+		int imageType = preserveAlpha ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
+    	BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, imageType);
+    	Graphics2D g = resizedImage.createGraphics();
+    	g.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
+    	g.dispose();
+    	
+    	return resizedImage;
+    }
 }

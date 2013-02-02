@@ -25,9 +25,6 @@ public class FaceDetector {
 	}
 	 
 	public IplImage DetectFaces(IplImage image) throws Exception {
-	
-	    // Load the image previously scanned.
-	    //IplImage image = cvLoadImage(filename, 1);
 	 
 	    // Converts the image to gray scale for detection to work, using the same dimensions as the original.
 	    IplImage grayImage = IplImage.createFrom(convertColorToGray(image.getBufferedImage()));
