@@ -111,7 +111,7 @@ public class FaceScanner{
 					// in comparing the two images.
 					user = FacialRecognizer.callNetwork("Users/", recFilename, "temp");
 					
-					JOptionPane.showMessageDialog(null, "User " + user + " was detected with a " + 10 +  "% accuracy level.");
+					JOptionPane.showMessageDialog(null, "User " + user.replace(".png", "") + " was detected with a " + 10 +  "% accuracy level.");
 					recognize = false;
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Unknown user.");

@@ -5,7 +5,10 @@ Improve UI
 
 Make into an executable
 
-Image size need to be?
+Create an accuracy level
+
+Errors:
+	- OpenCV Error: Bad argument (Unknown array type) in cvarrToMat, file /opt/OpenCV-2.4.3/modules/core/src/matrix.cpp, line 697
 
 
 Symposium
@@ -24,3 +27,6 @@ FINISHED
 Use detect button to run detection.  -- DONE
 Organize code and add comments and rename code -- DONE
 Draw boxes? If a box gets drawn within the face it will interfere with the recognition component. -- DONE
+Image size need to be?		-- DONE
+Closing/Canceling JOptionPane after clicking Add User		-- DONE
+Remove .png from name		-- DONE

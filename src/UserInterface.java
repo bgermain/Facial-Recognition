@@ -15,9 +15,11 @@ public class UserInterface extends JFrame{
 	JButton recognizeButton = new JButton("Recognize");
 	JButton closeButton = new JButton("Close");
 	GridLayout layout = new GridLayout(3, 1);
+	String name;
+	JFrame addUserFrame = new JFrame("Add User");
     
 	public UserInterface(){
-		//Initialize Control Panel
+		// Initialize Control Panel
 		super("Control Panel");
 		super.setLayout(layout);
 		super.add(addUserButton);
@@ -39,19 +41,26 @@ public class UserInterface extends JFrame{
 		addUserButton.addActionListener(
         		new ActionListener(){
         			public void actionPerformed(ActionEvent event){
-        				String name;
         				do{
-        					name = JOptionPane.showInputDialog("Please enter the name of the new user: ", "Enter your name here");
+        					name = JOptionPane.showInputDialog(addUserFrame, "Please enter the name of the new user: ", "Add User", JOptionPane.QUESTION_MESSAGE);
         					
-        					if(name == null || name.equalsIgnoreCase("Enter your name here") || name.isEmpty()){
-        						JOptionPane.showMessageDialog(null, "Please enter a valid entry");
+        					if(name != null){
+	        					if(name.isEmpty()){
+	        						JOptionPane.showMessageDialog(null, "Please enter a valid entry");
+	        						name = "";
+	        					}else if(name != null){
+	        						if(canvas.isEnabled()){
+			        					canvas.setEnabled(false);	//Change status to initialize trigger to scan image, save, detect, and crop
+			        					FaceScanner.changeFilename(name);
+			        				}else{
+			        					name = "";
+			        				}
+	        					}
         					}else{
-        						if(canvas.isEnabled()){
-		        					canvas.setEnabled(false);	//Change status to initialize trigger to scan image, save, detect, and crop
-		        					FaceScanner.changeFilename(name);
-		        				}
+        						name = "cancel";
         					}
-        				}while(name == null || name.equalsIgnoreCase("Enter your name here") || name.isEmpty());
+        				}while(name.isEmpty());
+        				
         			}
         		}
         );
