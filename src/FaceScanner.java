@@ -91,16 +91,23 @@ public class FaceScanner{
 						/*-------------------------------------------*/
 					}
 					cvSaveImage(filename, IplImage.createFrom(croppedImage));
-					JOptionPane.showMessageDialog(null, "User " + filename.replace(".png", "").replace("Users/", "") + " was added to the system.");
+					
+					ui.status.setText("User " + filename.replace(".png", "").replace("Users/", "") + " was added to the system.");
+					//JOptionPane.showMessageDialog(null, "User " + filename.replace(".png", "").replace("Users/", "") + " was added to the system.");
 					filename = "Users/temp.png";
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "There are no faces detected, please rescan to try again.");
+					ui.status.setText("There are no faces detected, please rescan to try again.");
+					//JOptionPane.showMessageDialog(null, "There are no faces detected, please rescan to try again.");
 				}
 				canvas.setEnabled(true);
 			}else if(recognize && !(canvas.isEnabled())){	//RUNS WHEN RECOGNIZE BUTTON PRESSED
 				String user = "";
 				try{
+					ui.status.setText("Scanning image...");
 					faceDetect.DetectFaces(image);		//Used primarily to populate the width, height, and location of the face to be detected.
+					canvas.showImage(image);
+					Thread.sleep(1000);		//Delay time to see the faces that are detected before choosing the closest.
+					
 					croppedImage = cropImage(image.getBufferedImage());
 					croppedImage = resizeImage(croppedImage, 125, 150, false);		//Resize the image for the recognizer
 					
@@ -109,12 +116,15 @@ public class FaceScanner{
 					// Train the neural network with the images saved in Users and then 
 					// recognize the face by finding the user with the highest accuracy
 					// in comparing the two images.
+					ui.status.setText("Processesing recognition algorithm...");
 					user = FacialRecognizer.callNetwork("Users/", recFilename, "temp");
 					
-					JOptionPane.showMessageDialog(null, "User " + user.replace(".png", "") + " was detected with a " + 10 +  "% accuracy level.");
+					ui.status.setText("User " + user.replace(".png", "") + " was detected.");
+					//JOptionPane.showMessageDialog(null, "User " + user.replace(".png", "") + " was detected with a " + 10 +  "% accuracy level.");
 					recognize = false;
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Unknown user.");
+					ui.status.setText("Unknown user.");
+					//JOptionPane.showMessageDialog(null, "Unknown user.");
 				}
 				canvas.setEnabled(true);
 			}

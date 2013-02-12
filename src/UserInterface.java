@@ -1,10 +1,15 @@
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
 
 import com.googlecode.javacv.CanvasFrame;
 
@@ -14,26 +19,38 @@ public class UserInterface extends JFrame{
 	JButton addUserButton = new JButton("Add User");
 	JButton recognizeButton = new JButton("Recognize");
 	JButton closeButton = new JButton("Close");
-	GridLayout layout = new GridLayout(3, 1);
+	JPanel buttonsPanel = new JPanel();
+	JPanel descPanel = new JPanel();
+	JLabel status = new JLabel();
+	GridLayout layout = new GridLayout(0, 3);
 	String name;
 	JFrame addUserFrame = new JFrame("Add User");
     
 	public UserInterface(){
 		// Initialize Control Panel
 		super("Control Panel");
-		super.setLayout(layout);
-		super.add(addUserButton);
-		super.add(recognizeButton);
-		super.add(closeButton);
+		super.add(buttonsPanel);
+		buttonsPanel.setLayout(layout);
+		//super.setLayout(layout);
+		buttonsPanel.add(addUserButton);
+		buttonsPanel.add(recognizeButton);
+		buttonsPanel.add(closeButton);
+		//super.add(descPanel);
+		descPanel.setLayout(new GridLayout(0, 1));
+		status.setText("                                           Welcome to the Facial Recognition Application!");
+		descPanel.add(status);
+		super.add(buttonsPanel, BorderLayout.NORTH);
+		super.add(new JSeparator(), BorderLayout.CENTER);
+		super.add(descPanel, BorderLayout.SOUTH);
 		super.setUndecorated(true);
-		super.setLocation(0, 22);
-		super.setSize(100, 480);
+		super.setLocation(350, 502);
+		super.setSize(640, 65);
 		super.setResizable(false);
 		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		// Initialize Canvas for Webcam
 		canvas.setSize(640, 480);
-		canvas.setLocation(100, 20);
+		canvas.setLocation(350, 22);
 		canvas.setResizable(false);
 		canvas.setDefaultCloseOperation(EXIT_ON_CLOSE);
         

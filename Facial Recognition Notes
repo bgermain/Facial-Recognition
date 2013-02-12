@@ -7,6 +7,8 @@ Make into an executable
 
 Create an accuracy level
 
+Remove green lines around the image
+
 Errors:
 	- OpenCV Error: Bad argument (Unknown array type) in cvarrToMat, file /opt/OpenCV-2.4.3/modules/core/src/matrix.cpp, line 697
 
