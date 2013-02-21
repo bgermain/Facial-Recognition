@@ -12,6 +12,7 @@ import org.neuroph.imgrec.ImageRecognitionHelper;
 public class FaceScanner{
     
 	IplImage image;
+	IplImage imageWithoutRects;
 	static boolean displayRects;
 	static String filename;
 	static String recFilename;
@@ -25,6 +26,7 @@ public class FaceScanner{
 		filename = "Users/temp.png";
 		recFilename = "UserAttempts/temp.png";
 		image = new IplImage();
+		imageWithoutRects = new IplImage();
 		width = 0;
 		height = 0;
 		x = 0;
@@ -66,10 +68,12 @@ public class FaceScanner{
 		while(true){
 			while(canvas.isEnabled()){
 	        	image = scanFrame(ui, canvas);
+	        	imageWithoutRects = scanFrame(ui, canvas);
 	        	Thread.sleep(10);
 	    	}
-			if(!recognize && !(canvas.isEnabled())){	//RUNS WHEN SCAN BUTTON IS PRESSED
+			if(!recognize && !(canvas.isEnabled())){	//RUNS WHEN ADD USER BUTTON IS PRESSED
 				try{
+					ui.status.setText("Scanning image...");
 					faceDetect.DetectFaces(image);		//Used primarily to populate the width, height, and location of the face to be detected.
 					
 					if(displayRects){
@@ -80,7 +84,7 @@ public class FaceScanner{
 						/*----------------------------------------*/
 					}	
 					
-					croppedImage = cropImage(image.getBufferedImage());
+					croppedImage = cropImage(imageWithoutRects.getBufferedImage());
 					croppedImage = resizeImage(croppedImage, 125, 150, false);		//Resize the image for the recognizer
 		
 					if(displayRects){
@@ -106,7 +110,7 @@ public class FaceScanner{
 					canvas.showImage(image);
 					Thread.sleep(1000);		//Delay time to see the faces that are detected before choosing the closest.
 					
-					croppedImage = cropImage(image.getBufferedImage());
+					croppedImage = cropImage(imageWithoutRects.getBufferedImage());
 					croppedImage = resizeImage(croppedImage, 125, 150, false);		//Resize the image for the recognizer
 					
 					cvSaveImage(recFilename, IplImage.createFrom(croppedImage));
